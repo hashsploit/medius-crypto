@@ -7,19 +7,22 @@ import net.hashsploit.medius.MediusEncryptedData;
 import net.hashsploit.medius.Utils;
 import net.hashsploit.medius.hash.SHA1;
 
+/**
+ * PlayStation 2's custom RC4 Medius implementation 
+ * @author hashsploit
+ */
 public class PS2_RC4 implements ICipher {
 
 	private static final int STATE_LENGTH = 256;
 
 	private byte[] engineState;
-
 	private int x;
 	private int y;
 	private byte[] workingKey;
 	private CipherContext context;
 
 	/**
-	 * Initialize with a 512-bit key
+	 * Initialize crypto with a 512-bit key
 	 * 
 	 * @param key
 	 * @param context
@@ -105,7 +108,7 @@ public class PS2_RC4 implements ICipher {
 	}
 
 	private byte[] _decrypt(byte[] input, int inOff, int length, int outOff) {
-		byte[] output = new byte[length];
+		final byte[] output = new byte[length];
 		
 		for (int i = 0; i < length; ++i) {
 			y = (y + 5) & 0xFF;
@@ -151,7 +154,7 @@ public class PS2_RC4 implements ICipher {
 		setKey(workingKey, hash);
 
 		plain = _decrypt(data, 0, data.length, 0);
-		byte[] chkHash = hash(plain);
+		final byte[] chkHash = hash(plain);
 
 		return new MediusDecryptedData(plain, Utils.sequenceEquals(hash, chkHash));
 	}
@@ -164,13 +167,13 @@ public class PS2_RC4 implements ICipher {
 			y = (y + engineState[x]) & 0xff;
 
 			// Swap
-			byte temp = engineState[x];
+			final byte temp = engineState[x];
 			engineState[x] = engineState[y];
 			engineState[y] = temp;
 
 			// Xor
-			byte a = input[i + inOff];
-			byte b = engineState[(engineState[x] + engineState[y]) & 0xff];
+			final byte a = input[i + inOff];
+			final byte b = engineState[(engineState[x] + engineState[y]) & 0xff];
 			output[i + outOff] = (byte) (a ^ b);
 
 			//
@@ -180,6 +183,9 @@ public class PS2_RC4 implements ICipher {
 		return output;
 	}
 
+	/**
+	 * Encrypt data using the last key provided
+	 */
 	@Override
 	public MediusEncryptedData encrypt(byte[] data) {
 		
@@ -221,7 +227,7 @@ public class PS2_RC4 implements ICipher {
 
 	@Override
 	public String toString() {
-		return "PS2_UYA_RC4(" + context + ", " + Utils.bytesToString(workingKey) + ")";
+		return "PS2_RC4(" + context + ", " + Utils.bytesToString(workingKey) + ")";
 	}
 	
 }
