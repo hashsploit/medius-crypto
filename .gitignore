@@ -1,0 +1,8 @@
+# IDE files
+.classpath
+.project
+.settings/
+
+# Bins
+target/
+bin/
