@@ -48,11 +48,5 @@
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.65</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
-		<dependency>
-			<groupId>info.picocli</groupId>
-			<artifactId>picocli</artifactId>
-			<version>4.2.0</version>
-		</dependency>
 	</dependencies>
 </project>
