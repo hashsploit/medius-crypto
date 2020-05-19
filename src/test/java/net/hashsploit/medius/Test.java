@@ -3,7 +3,7 @@ package net.hashsploit.medius;
 import java.nio.charset.Charset;
 
 import net.hashsploit.medius.hash.SHA1;
-import net.hashsploit.medius.rc.PS2_RC4;
+import net.hashsploit.medius.rc.PS2_RCQ;
 
 public class Test {
 	
@@ -61,7 +61,7 @@ public class Test {
 		print("Data: " + Utils.bytesToString(data));
 		
 		for (CipherContext context : CipherContext.values()) {
-			PS2_RC4 rc = new PS2_RC4(key, context);
+			PS2_RCQ rc = new PS2_RCQ(key, context);
 			MediusEncryptedData encrypted = rc.encrypt(data);
 			print("Encrypted status: " + encrypted.isSuccessful());
 			print("Encrypted data: " + Utils.bytesToString(encrypted.getCipher()));

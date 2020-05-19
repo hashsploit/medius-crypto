@@ -11,12 +11,12 @@ import net.hashsploit.medius.hash.SHA1;
  * PlayStation 3's custom RC Medius implementation 
  * @author hashsploit
  */
-public class PS3_RC implements ICipher {
+public class PS3_RCQ implements ICipher {
 	
 	private byte[] key = null;
 	private CipherContext context;
 	
-	public PS3_RC(byte[] key, CipherContext context) {
+	public PS3_RCQ(byte[] key, CipherContext context) {
 		this.context = context;
 		setKey(key);
 	}
@@ -166,14 +166,14 @@ public class PS3_RC implements ICipher {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof PS3_RC) {
-			PS3_RC rc = (PS3_RC) obj;
+		if (obj instanceof PS3_RCQ) {
+			PS3_RCQ rc = (PS3_RCQ) obj;
 			return rc.equals(this);
 		}
 		return super.equals(obj);
 	}
 	
-	public boolean equals(PS3_RC b) {
+	public boolean equals(PS3_RCQ b) {
 		return b.context == this.context && Utils.sequenceEquals(b.key, this.key);
 	}
 
