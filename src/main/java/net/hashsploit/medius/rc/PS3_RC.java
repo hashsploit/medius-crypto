@@ -1,7 +1,5 @@
 package net.hashsploit.medius.rc;
 
-import com.sun.tools.javac.util.Convert;
-
 import net.hashsploit.medius.CipherContext;
 import net.hashsploit.medius.ICipher;
 import net.hashsploit.medius.MediusDecryptedData;
