@@ -11,7 +11,7 @@ import net.hashsploit.medius.hash.SHA1;
  * PlayStation 2's custom RC4 Medius implementation 
  * @author hashsploit
  */
-public class PS2_RCQ implements ICipher {
+public class PS2_RC4 implements ICipher {
 
 	private static final int STATE_LENGTH = 256;
 
@@ -27,7 +27,7 @@ public class PS2_RCQ implements ICipher {
 	 * @param key
 	 * @param context
 	 */
-	public PS2_RCQ(byte[] key, CipherContext context) {
+	public PS2_RC4(byte[] key, CipherContext context) {
 		this.context = context;
 		setKey(key);
 	}
@@ -214,20 +214,20 @@ public class PS2_RCQ implements ICipher {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof PS2_RCQ) {
-			PS2_RCQ rc = (PS2_RCQ) obj;
+		if (obj instanceof PS2_RC4) {
+			PS2_RC4 rc = (PS2_RC4) obj;
 			return rc.equals(this);
 		}
 		return super.equals(obj);
 	}
 	
-	public boolean equals(PS2_RCQ b) {
+	public boolean equals(PS2_RC4 b) {
 		return b.context == this.context && Utils.sequenceEquals(b.workingKey, this.workingKey);
 	}
 
 	@Override
 	public String toString() {
-		return "PS2_RC4(" + context + ", " + Utils.bytesToString(workingKey) + ")";
+		return "PS2_RC4(" + context + ", " + Utils.bytesToHex(workingKey) + ")";
 	}
 	
 }

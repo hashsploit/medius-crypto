@@ -1,48 +1,51 @@
 package net.hashsploit.medius;
 
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 
-import net.hashsploit.medius.hash.SHA1;
-import net.hashsploit.medius.rc.PS2_RCQ;
+import net.hashsploit.medius.rc.PS2_RC4;
+import net.hashsploit.medius.rsa.PS2_RSA;
 
 public class Test {
 	
+	private static final BigInteger N = new BigInteger("101177020773116032450768434219907665711628442914109359705930212851485814671757");
+	private static final BigInteger E = new BigInteger("101959470976625878182337603500729946859798449583099010462249380230433894289641");
+	private static final BigInteger D = new BigInteger("4854567300243763614870687120476899445974505675147434999327174747312047455575182761195687859800492317495944895566174677168271650454805328075020357360662513");
 	
 	public static void main(String[] args) {
-		print("Running Java Medius Encrypt/Decrypt tests ...");
+		print("Running Medius Encrypt/Decrypt tests ...");
 		
-		sha1Test();
-		print("");
+		print("#### Testing PS2 Textboook RSA encryption/decryption");
+		ps2_rsa_test();
 		
-		ps2rc4Test();
-		print("");
+		print("#### Testing PS2 RC4 encryption/decryption");
+		ps2_rc4_test();
 		
 	}
 	
-	private static void sha1Test() {
-		header("SHA1 TEST");
+	
+	private static void ps2_rsa_test() {
 		
-		byte[] data = new byte[] {
-			1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1,
-			1, 1, (byte)255, 1, 1
-		};
+		String message = "Hello this is a plaintext message!";
 		
-		print("Data: " + Utils.bytesToString(data));
+		byte[] messageBytes = message.getBytes();
+		PS2_RSA rsa = new PS2_RSA(N, E, D);
+		MediusEncryptedData encryptedMessage = rsa.encrypt(messageBytes);
+		byte[] hash = encryptedMessage.getHash();
 		
-		for (CipherContext context : CipherContext.values()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Hashed CipherContext(");
-			sb.append(Utils.byteToString(context.id)).append("/").append(context.name()).append("): ");
-			sb.append(Utils.bytesToString(SHA1.hash(data, context)));
-			print(sb.toString());
-			
-		}	
+		print("RSA -> message: " + message);
+		print("RSA -> messageBytes: " + Utils.bytesToHex(messageBytes));
+		print("RSA -> encryptedMessageBytes: " + Utils.bytesToHex(encryptedMessage.getCipher()));
+		
+		MediusDecryptedData decryptedMessage = rsa.decrypt(encryptedMessage.getCipher(), hash);
+		
+		print("RSA -> decryptedMessageBytes: " + Utils.bytesToHex(decryptedMessage.getPlain()));
+		print("RSA -> decryptedMessage: " + new String(decryptedMessage.getPlain()));
+		
 	}
 	
-	private static void ps2rc4Test() {
-		header("PS2 RC4 TEST");
+	
+	private static void ps2_rc4_test() {
 		
 		byte[] key = new byte[] {
 			0x42, 0x42, 0x42, 0x42,  0x42, 0x42, 0x42, 0x42,
@@ -57,26 +60,21 @@ public class Test {
 		
 		byte[] data = "Hello World!".getBytes(Charset.forName("UTF-8"));
 		
-		print("Key: " + Utils.bytesToString(key));
-		print("Data: " + Utils.bytesToString(data));
+		print("Key: " + Utils.bytesToHex(key));
+		print("Data: " + Utils.bytesToHex(data));
 		
 		for (CipherContext context : CipherContext.values()) {
-			PS2_RCQ rc = new PS2_RCQ(key, context);
+			PS2_RC4 rc = new PS2_RC4(key, context);
 			MediusEncryptedData encrypted = rc.encrypt(data);
 			print("Encrypted status: " + encrypted.isSuccessful());
-			print("Encrypted data: " + Utils.bytesToString(encrypted.getCipher()));
-			print("Encryption hash: " + Utils.bytesToString(encrypted.getHash()));
+			print("Encrypted data: " + Utils.bytesToHex(encrypted.getCipher()));
+			print("Encryption hash: " + Utils.bytesToHex(encrypted.getHash()));
 			
 			MediusDecryptedData decrypted = rc.decrypt(encrypted.getCipher(), encrypted.getHash());
 			print("Decrypted status: " + encrypted.isSuccessful());
-			print("Decrypted data: " + Utils.bytesToString(decrypted.getPlain()));
+			print("Decrypted data: " + Utils.bytesToHex(decrypted.getPlain()));
 			print("----");
 		}
-		
-	}
-	
-	private static void header(String s) {
-		print("==== " + s + " ====");
 	}
 	
 	private static void print(String s) {

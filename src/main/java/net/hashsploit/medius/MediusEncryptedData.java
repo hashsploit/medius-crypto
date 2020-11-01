@@ -12,16 +12,24 @@ public class MediusEncryptedData {
 		this.success = status;
 	}
 	
+	/**
+	 * Get the encrypted data.
+	 * @return
+	 */
 	public byte[] getCipher() {
 		return cipher;
 	}
 	
+	/**
+	 * Get the hash used.
+	 * @return
+	 */
 	public byte[] getHash() {
 		return hash;
 	}
 	
 	/**
-	 * Returns true if encryption was successful
+	 * Returns true if encryption was successful.
 	 * @return
 	 */
 	public boolean isSuccessful() {

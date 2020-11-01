@@ -17,17 +17,16 @@ public class Utils {
 		return true;
 	}
 	
-	public static final String byteToString(byte data) {
+	public static final String byteToHex(byte data) {
 		return "0x" + (data < 10 ? "0" + data : data);
 	}
 	
-	public static final String bytesToString(byte[] buffer) {
+	public static final String bytesToHex(byte[] buffer) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < buffer.length; ++i) {
 			sb.append(String.format("%02X", buffer[i]));
 		}
 		return sb.toString();
 	}
-	
 	
 }

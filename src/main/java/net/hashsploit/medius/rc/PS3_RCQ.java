@@ -179,7 +179,7 @@ public class PS3_RCQ implements ICipher {
 
 	@Override
 	public String toString() {
-		return "PS3_RC(" + context + ", " + Utils.bytesToString(key) + ")";
+		return "PS3_RC(" + context + ", " + Utils.bytesToHex(key) + ")";
 	}
 	
 }

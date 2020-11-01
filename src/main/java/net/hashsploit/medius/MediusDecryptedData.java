@@ -10,12 +10,16 @@ public class MediusDecryptedData {
 		this.success = success;
 	}
 	
+	/**
+	 * Get the decrypted plaintext data.
+	 * @return
+	 */
 	public byte[] getPlain() {
 		return plain;
 	}
 	
 	/**
-	 * Returns true if encryption was successful
+	 * Returns true if encryption was successful.
 	 * @return
 	 */
 	public boolean isSuccessful() {
