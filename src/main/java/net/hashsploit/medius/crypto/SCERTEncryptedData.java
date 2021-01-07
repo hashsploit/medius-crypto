@@ -1,13 +1,13 @@
-package net.hashsploit.medius;
+package net.hashsploit.medius.crypto;
 
-public class MediusEncryptedData {
+public class SCERTEncryptedData {
 	
-	private byte[] cipher;
+	private byte[] data;
 	private byte[] hash;
 	private boolean success;
 	
-	public MediusEncryptedData(final byte[] cipher, final byte[] hash, boolean status) {
-		this.cipher = cipher;
+	public SCERTEncryptedData(final byte[] data, final byte[] hash, boolean status) {
+		this.data = data;
 		this.hash = hash;
 		this.success = status;
 	}
@@ -16,8 +16,8 @@ public class MediusEncryptedData {
 	 * Get the encrypted data.
 	 * @return
 	 */
-	public byte[] getCipher() {
-		return cipher;
+	public byte[] getData() {
+		return data;
 	}
 	
 	/**

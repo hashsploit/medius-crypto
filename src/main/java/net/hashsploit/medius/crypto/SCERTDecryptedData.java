@@ -1,12 +1,12 @@
-package net.hashsploit.medius;
+package net.hashsploit.medius.crypto;
 
-public class MediusDecryptedData {
+public class SCERTDecryptedData {
 	
 	private byte[] plain;
 	private boolean success;
 	
-	public MediusDecryptedData(final byte[] plain, boolean success) {
-		this.plain = plain;
+	public SCERTDecryptedData(final byte[] data, boolean success) {
+		this.plain = data;
 		this.success = success;
 	}
 	
@@ -14,7 +14,7 @@ public class MediusDecryptedData {
 	 * Get the decrypted plaintext data.
 	 * @return
 	 */
-	public byte[] getPlain() {
+	public byte[] getData() {
 		return plain;
 	}
 	

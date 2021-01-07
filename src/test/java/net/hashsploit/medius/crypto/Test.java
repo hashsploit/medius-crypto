@@ -1,10 +1,14 @@
-package net.hashsploit.medius;
+package net.hashsploit.medius.crypto;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 
-import net.hashsploit.medius.rc.PS2_RC4;
-import net.hashsploit.medius.rsa.PS2_RSA;
+import net.hashsploit.medius.crypto.CipherContext;
+import net.hashsploit.medius.crypto.SCERTDecryptedData;
+import net.hashsploit.medius.crypto.SCERTEncryptedData;
+import net.hashsploit.medius.crypto.Utils;
+import net.hashsploit.medius.crypto.rc.PS2_RC4;
+import net.hashsploit.medius.crypto.rsa.PS2_RSA;
 
 public class Test {
 	
@@ -30,17 +34,17 @@ public class Test {
 		
 		byte[] messageBytes = message.getBytes();
 		PS2_RSA rsa = new PS2_RSA(N, E, D);
-		MediusEncryptedData encryptedMessage = rsa.encrypt(messageBytes);
+		SCERTEncryptedData encryptedMessage = rsa.encrypt(messageBytes);
 		byte[] hash = encryptedMessage.getHash();
 		
 		print("RSA -> message: " + message);
 		print("RSA -> messageBytes: " + Utils.bytesToHex(messageBytes));
-		print("RSA -> encryptedMessageBytes: " + Utils.bytesToHex(encryptedMessage.getCipher()));
+		print("RSA -> encryptedMessageBytes: " + Utils.bytesToHex(encryptedMessage.getData()));
 		
-		MediusDecryptedData decryptedMessage = rsa.decrypt(encryptedMessage.getCipher(), hash);
+		SCERTDecryptedData decryptedMessage = rsa.decrypt(encryptedMessage.getData(), hash);
 		
-		print("RSA -> decryptedMessageBytes: " + Utils.bytesToHex(decryptedMessage.getPlain()));
-		print("RSA -> decryptedMessage: " + new String(decryptedMessage.getPlain()));
+		print("RSA -> decryptedMessageBytes: " + Utils.bytesToHex(decryptedMessage.getData()));
+		print("RSA -> decryptedMessage: " + new String(decryptedMessage.getData()));
 		
 	}
 	
@@ -65,14 +69,14 @@ public class Test {
 		
 		for (CipherContext context : CipherContext.values()) {
 			PS2_RC4 rc = new PS2_RC4(key, context);
-			MediusEncryptedData encrypted = rc.encrypt(data);
+			SCERTEncryptedData encrypted = rc.encrypt(data);
 			print("Encrypted status: " + encrypted.isSuccessful());
-			print("Encrypted data: " + Utils.bytesToHex(encrypted.getCipher()));
+			print("Encrypted data: " + Utils.bytesToHex(encrypted.getData()));
 			print("Encryption hash: " + Utils.bytesToHex(encrypted.getHash()));
 			
-			MediusDecryptedData decrypted = rc.decrypt(encrypted.getCipher(), encrypted.getHash());
+			SCERTDecryptedData decrypted = rc.decrypt(encrypted.getData(), encrypted.getHash());
 			print("Decrypted status: " + encrypted.isSuccessful());
-			print("Decrypted data: " + Utils.bytesToHex(decrypted.getPlain()));
+			print("Decrypted data: " + Utils.bytesToHex(decrypted.getData()));
 			print("----");
 		}
 	}

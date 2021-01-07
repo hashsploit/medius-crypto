@@ -1,8 +1,8 @@
-package net.hashsploit.medius.rsa;
+package net.hashsploit.medius.crypto.rsa;
 
 import java.math.BigInteger;
 
-import net.hashsploit.medius.hash.SHA1;
+import net.hashsploit.medius.crypto.hash.SHA1;
 
 public class PS3_RSA extends PS2_RSA {
 	

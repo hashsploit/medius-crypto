@@ -1,11 +1,11 @@
-package net.hashsploit.medius.rc;
+package net.hashsploit.medius.crypto.rc;
 
-import net.hashsploit.medius.CipherContext;
-import net.hashsploit.medius.ICipher;
-import net.hashsploit.medius.MediusDecryptedData;
-import net.hashsploit.medius.MediusEncryptedData;
-import net.hashsploit.medius.Utils;
-import net.hashsploit.medius.hash.SHA1;
+import net.hashsploit.medius.crypto.CipherContext;
+import net.hashsploit.medius.crypto.ICipher;
+import net.hashsploit.medius.crypto.SCERTDecryptedData;
+import net.hashsploit.medius.crypto.SCERTEncryptedData;
+import net.hashsploit.medius.crypto.Utils;
+import net.hashsploit.medius.crypto.hash.SHA1;
 
 /**
  * PlayStation 3's custom RC Medius implementation 
@@ -26,7 +26,7 @@ public class PS3_RCQ implements ICipher {
 	}
 
 	@Override
-	public MediusDecryptedData decrypt(byte[] data, byte[] hash) {
+	public SCERTDecryptedData decrypt(byte[] data, byte[] hash) {
 		
         if (key == null) {
             return null;
@@ -38,7 +38,7 @@ public class PS3_RCQ implements ICipher {
         // Check if empty hash
         // If hash is 0, the data is already in plaintext
         if (hash[0] == 0 && hash[1] == 0 && hash[2] == 0 && (hash[3] & 0x1F) == 0) {
-        	return new MediusDecryptedData(plain, true);
+        	return new SCERTDecryptedData(plain, true);
         }
 
         // IV
@@ -52,7 +52,7 @@ public class PS3_RCQ implements ICipher {
 	}
 
 	@Override
-	public MediusEncryptedData encrypt(byte[] data) {
+	public SCERTEncryptedData encrypt(byte[] data) {
 		return null;
 	}
 

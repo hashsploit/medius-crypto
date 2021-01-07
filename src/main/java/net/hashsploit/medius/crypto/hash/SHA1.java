@@ -1,8 +1,8 @@
-package net.hashsploit.medius.hash;
+package net.hashsploit.medius.crypto.hash;
 
 import org.bouncycastle.crypto.digests.SHA1Digest;
 
-import net.hashsploit.medius.CipherContext;
+import net.hashsploit.medius.crypto.CipherContext;
 
 public class SHA1 {
 

@@ -1,11 +1,11 @@
-package net.hashsploit.medius.rc;
+package net.hashsploit.medius.crypto.rc;
 
-import net.hashsploit.medius.CipherContext;
-import net.hashsploit.medius.ICipher;
-import net.hashsploit.medius.MediusDecryptedData;
-import net.hashsploit.medius.MediusEncryptedData;
-import net.hashsploit.medius.Utils;
-import net.hashsploit.medius.hash.SHA1;
+import net.hashsploit.medius.crypto.CipherContext;
+import net.hashsploit.medius.crypto.ICipher;
+import net.hashsploit.medius.crypto.SCERTDecryptedData;
+import net.hashsploit.medius.crypto.SCERTEncryptedData;
+import net.hashsploit.medius.crypto.Utils;
+import net.hashsploit.medius.crypto.hash.SHA1;
 
 /**
  * PlayStation 2's custom RC4 Medius implementation 
@@ -139,7 +139,7 @@ public class PS2_RC4 implements ICipher {
 	}
 
 	@Override
-	public MediusDecryptedData decrypt(byte[] data, byte[] hash) {
+	public SCERTDecryptedData decrypt(byte[] data, byte[] hash) {
 
 		byte[] plain = new byte[data.length];
 
@@ -147,7 +147,7 @@ public class PS2_RC4 implements ICipher {
 		// If hash is 0, the data is already in plaintext
 		if (hash[0] == 0 && hash[1] == 0 && hash[2] == 0 && (hash[3] & 0x1F) == 0) {
 			System.arraycopy(data, 0, plain, 0, data.length);
-			return new MediusDecryptedData(plain, true);
+			return new SCERTDecryptedData(plain, true);
 		}
 
 		// Set seed
@@ -156,7 +156,7 @@ public class PS2_RC4 implements ICipher {
 		plain = _decrypt(data, 0, data.length, 0);
 		final byte[] chkHash = hash(plain);
 
-		return new MediusDecryptedData(plain, Utils.sequenceEquals(hash, chkHash));
+		return new SCERTDecryptedData(plain, Utils.sequenceEquals(hash, chkHash));
 	}
 	
 	private byte[] _encrypt(byte[] input, int inOff, int length, int outOff) {
@@ -187,7 +187,7 @@ public class PS2_RC4 implements ICipher {
 	 * Encrypt data using the last key provided
 	 */
 	@Override
-	public MediusEncryptedData encrypt(byte[] data) {
+	public SCERTEncryptedData encrypt(byte[] data) {
 		
 		 // Set seed
         byte[] hash = SHA1.hash(data, context);
@@ -196,7 +196,7 @@ public class PS2_RC4 implements ICipher {
         byte[] cipher = new byte[data.length];
         cipher = _encrypt(data, 0, data.length, 0);
         
-        return new MediusEncryptedData(cipher, hash, true);
+        return new SCERTEncryptedData(cipher, hash, true);
 	}
 	
 	@Override

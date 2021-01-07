@@ -1,13 +1,13 @@
-package net.hashsploit.medius.rsa;
+package net.hashsploit.medius.crypto.rsa;
 
 import java.math.BigInteger;
 
-import net.hashsploit.medius.CipherContext;
-import net.hashsploit.medius.ICipher;
-import net.hashsploit.medius.MediusDecryptedData;
-import net.hashsploit.medius.MediusEncryptedData;
-import net.hashsploit.medius.Utils;
-import net.hashsploit.medius.hash.SHA1;
+import net.hashsploit.medius.crypto.CipherContext;
+import net.hashsploit.medius.crypto.ICipher;
+import net.hashsploit.medius.crypto.SCERTDecryptedData;
+import net.hashsploit.medius.crypto.SCERTEncryptedData;
+import net.hashsploit.medius.crypto.Utils;
+import net.hashsploit.medius.crypto.hash.SHA1;
 
 /**
  * Textbook RSA implementation
@@ -54,30 +54,30 @@ public class PS2_RSA implements ICipher {
 	}
 	
 	@Override
-	public MediusDecryptedData decrypt(byte[] input, byte[] hash) {
+	public SCERTDecryptedData decrypt(byte[] input, byte[] hash) {
 		BigInteger plainBigInt = _decrypt(new BigInteger(input));
 		byte[] plain = plainBigInt.toByteArray();
 
 		byte[] ourHash = hash(plain);
 		if (Utils.sequenceEquals(ourHash, hash)) {
-			return new MediusDecryptedData(plain, true);
+			return new SCERTDecryptedData(plain, true);
 		}
 		
 		// Handle case where message > n
 		plainBigInt = plainBigInt.add(n);
 		plain = plainBigInt.toByteArray();
 		ourHash = hash(plain);
-		return new MediusDecryptedData(plain, Utils.sequenceEquals(ourHash, hash));
+		return new SCERTDecryptedData(plain, Utils.sequenceEquals(ourHash, hash));
 	}
 	
 	@Override
-	public MediusEncryptedData encrypt(byte[] input) {
+	public SCERTEncryptedData encrypt(byte[] input) {
 		byte[] hash = hash(input);
 		byte[] cipher = _encrypt(new BigInteger(input)).toByteArray();
-		return new MediusEncryptedData(cipher, hash, true);
+		return new SCERTEncryptedData(cipher, hash, true);
 	}
 	
-	protected void setContext(CipherContext context) {
+	public void setContext(CipherContext context) {
 		this.context = context;
 	}
 	
