@@ -1,6 +1,7 @@
 package net.hashsploit.medius.crypto.rsa;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import net.hashsploit.medius.crypto.CipherContext;
 import net.hashsploit.medius.crypto.ICipher;
@@ -27,7 +28,7 @@ import net.hashsploit.medius.crypto.hash.SHA1;
  * @author hashsploit
  */
 public class PS2_RSA implements ICipher {
-	
+
 	private CipherContext context;
 	private BigInteger n;
 	private BigInteger e;
@@ -55,25 +56,42 @@ public class PS2_RSA implements ICipher {
 	
 	@Override
 	public SCERTDecryptedData decrypt(byte[] input, byte[] hash) {
-		BigInteger plainBigInt = _decrypt(new BigInteger(input));
+		Utils.flipByteArray(input);
+		BigInteger plainBigInt = _decrypt(new BigInteger(1, input));
+		
 		byte[] plain = plainBigInt.toByteArray();
+		Utils.flipByteArray(plain);
 
 		byte[] ourHash = hash(plain);
+
 		if (Utils.sequenceEquals(ourHash, hash)) {
+			if (plain.length != input.length) {
+				plain = Arrays.copyOf(plain, input.length);
+			}
 			return new SCERTDecryptedData(plain, true);
 		}
+		
 		
 		// Handle case where message > n
 		plainBigInt = plainBigInt.add(n);
 		plain = plainBigInt.toByteArray();
+		Utils.flipByteArray(plain);
 		ourHash = hash(plain);
+		
+		// Sometimes has an extra zero at the end
+		if (plain.length != input.length) {
+			plain = Arrays.copyOf(plain, input.length);
+		}
+		
 		return new SCERTDecryptedData(plain, Utils.sequenceEquals(ourHash, hash));
 	}
 	
 	@Override
 	public SCERTEncryptedData encrypt(byte[] input) {
+		Utils.flipByteArray(input);
 		byte[] hash = hash(input);
-		byte[] cipher = _encrypt(new BigInteger(input)).toByteArray();
+		byte[] cipher = _encrypt(new BigInteger(1,input)).toByteArray();
+		Utils.flipByteArray(cipher);
 		return new SCERTEncryptedData(cipher, hash, true);
 	}
 	
