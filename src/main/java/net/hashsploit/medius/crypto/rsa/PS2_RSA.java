@@ -56,11 +56,11 @@ public class PS2_RSA implements ICipher {
 	
 	@Override
 	public SCERTDecryptedData decrypt(byte[] input, byte[] hash) {
-		Utils.flipByteArray(input);
+		input = Utils.flipByteArray(input);
 		BigInteger plainBigInt = _decrypt(new BigInteger(1, input));
 		
 		byte[] plain = plainBigInt.toByteArray();
-		Utils.flipByteArray(plain);
+		plain = Utils.flipByteArray(plain);
 
 		byte[] ourHash = hash(plain);
 
@@ -75,7 +75,7 @@ public class PS2_RSA implements ICipher {
 		// Handle case where message > n
 		plainBigInt = plainBigInt.add(n);
 		plain = plainBigInt.toByteArray();
-		Utils.flipByteArray(plain);
+		plain = Utils.flipByteArray(plain);
 		ourHash = hash(plain);
 		
 		// Sometimes has an extra zero at the end
@@ -88,10 +88,10 @@ public class PS2_RSA implements ICipher {
 	
 	@Override
 	public SCERTEncryptedData encrypt(byte[] input) {
-		Utils.flipByteArray(input);
+		input = Utils.flipByteArray(input);
 		byte[] hash = hash(input);
 		byte[] cipher = _encrypt(new BigInteger(1,input)).toByteArray();
-		Utils.flipByteArray(cipher);
+		cipher = Utils.flipByteArray(cipher);
 		return new SCERTEncryptedData(cipher, hash, true);
 	}
 	
