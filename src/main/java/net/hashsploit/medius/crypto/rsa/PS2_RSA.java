@@ -88,10 +88,14 @@ public class PS2_RSA implements ICipher {
 	
 	@Override
 	public SCERTEncryptedData encrypt(byte[] input) {
-		input = Utils.flipByteArray(input);
 		byte[] hash = hash(input);
+		input = Utils.flipByteArray(input);
 		byte[] cipher = _encrypt(new BigInteger(1,input)).toByteArray();
 		cipher = Utils.flipByteArray(cipher);
+		// Sometimes has an extra zero at the end
+		if (cipher.length != input.length) {
+			cipher = Arrays.copyOf(cipher, input.length);
+		}
 		return new SCERTEncryptedData(cipher, hash, true);
 	}
 	
