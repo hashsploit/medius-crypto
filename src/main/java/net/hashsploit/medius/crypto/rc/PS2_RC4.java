@@ -121,12 +121,12 @@ public class PS2_RC4 implements ICipher {
 
 			v0 += a2;
 			v0 &= 0xFF;
-			int v1 = state.engineState[v0];
+			int v1 = state.engineState[v0] & 0xFF;
 
 			a0 ^= (byte) v1;
-			output[i + outOff] = a0;
+			output[i + outOff] = (byte) (a0 & 0xFF);
 			
-			v1 = state.engineState[a0] + state.x;
+			v1 = state.engineState[a0 & 0xFF] + state.x;
 			state.x = v1 & 0xFF;
 		}
 	}
