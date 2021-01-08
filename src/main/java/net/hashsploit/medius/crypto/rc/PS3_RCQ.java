@@ -42,9 +42,9 @@ public class PS3_RCQ implements ICipher {
         }
 
         // IV
-        byte[] iv = new byte[0x10];
+        byte[] iv = new byte[(byte)0x10];
         short[] seed = new short[4];
-        System.arraycopy(key, 0, iv, 0, 0x10);
+        System.arraycopy(key, 0, iv, 0, (byte) 0x10);
         
         // FIXME: missing
 

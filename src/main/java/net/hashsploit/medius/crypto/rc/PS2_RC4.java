@@ -8,7 +8,8 @@ import net.hashsploit.medius.crypto.Utils;
 import net.hashsploit.medius.crypto.hash.SHA1;
 
 /**
- * PlayStation 2's custom RC4 Medius implementation 
+ * PlayStation 2's custom RC4 Medius implementation
+ * 
  * @author hashsploit
  */
 public class PS2_RC4 implements ICipher {
@@ -109,7 +110,7 @@ public class PS2_RC4 implements ICipher {
 
 	private byte[] _decrypt(byte[] input, int inOff, int length, int outOff) {
 		final byte[] output = new byte[length];
-		
+
 		for (int i = 0; i < length; ++i) {
 			y = (y + 5) & 0xFF;
 
@@ -134,7 +135,7 @@ public class PS2_RC4 implements ICipher {
 			v1 = engineState[a0] + x;
 			x = v1 & 0xFF;
 		}
-		
+
 		return output;
 	}
 
@@ -158,10 +159,10 @@ public class PS2_RC4 implements ICipher {
 
 		return new SCERTDecryptedData(plain, Utils.sequenceEquals(hash, chkHash));
 	}
-	
+
 	private byte[] _encrypt(byte[] input, int inOff, int length, int outOff) {
 		byte[] output = new byte[length];
-		
+
 		for (int i = 0; i < length; ++i) {
 			x = (x + 5) & 0xff;
 			y = (y + engineState[x]) & 0xff;
@@ -176,10 +177,9 @@ public class PS2_RC4 implements ICipher {
 			final byte b = engineState[(engineState[x] + engineState[y]) & 0xff];
 			output[i + outOff] = (byte) (a ^ b);
 
-			//
 			y = (engineState[input[i + inOff]] + y) & 0xff;
 		}
-		
+
 		return output;
 	}
 
@@ -188,17 +188,17 @@ public class PS2_RC4 implements ICipher {
 	 */
 	@Override
 	public SCERTEncryptedData encrypt(byte[] data) {
-		
-		 // Set seed
-        byte[] hash = SHA1.hash(data, context);
-        setKey(workingKey, hash);
 
-        byte[] cipher = new byte[data.length];
-        cipher = _encrypt(data, 0, data.length, 0);
-        
-        return new SCERTEncryptedData(cipher, hash, true);
+		// Set seed
+		byte[] hash = SHA1.hash(data, context);
+		setKey(workingKey, hash);
+
+		byte[] cipher = new byte[data.length];
+		cipher = _encrypt(data, 0, data.length, 0);
+
+		return new SCERTEncryptedData(cipher, hash, true);
 	}
-	
+
 	@Override
 	public CipherContext getContext() {
 		return context;
@@ -209,9 +209,9 @@ public class PS2_RC4 implements ICipher {
 	}
 
 	public byte[] hash(byte[] input) {
-        return SHA1.hash(input, context);
-    }
-	
+		return SHA1.hash(input, context);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof PS2_RC4) {
@@ -220,7 +220,7 @@ public class PS2_RC4 implements ICipher {
 		}
 		return super.equals(obj);
 	}
-	
+
 	public boolean equals(PS2_RC4 b) {
 		return b.context == this.context && Utils.sequenceEquals(b.workingKey, this.workingKey);
 	}
@@ -229,5 +229,5 @@ public class PS2_RC4 implements ICipher {
 	public String toString() {
 		return "PS2_RC4(" + context + ", " + Utils.bytesToHex(workingKey) + ")";
 	}
-	
+
 }

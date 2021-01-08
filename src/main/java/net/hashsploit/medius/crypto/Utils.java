@@ -45,6 +45,11 @@ public class Utils {
 		return sb.toString();
 	}
 	
+	/**
+	 * This flips the byte array's endianness.
+	 * @param array
+	 * @return
+	 */
 	public static byte[] flipByteArray(byte[] array) {
 	      byte[] result = new byte[array.length];
 	      for (int i = 0; i < array.length; i++) {

@@ -10,7 +10,7 @@ public class SHA1 {
 	private SHA1() {}
 	
 	public static byte[] hash(byte[] input, CipherContext context) {
-		return hash(input, 0, input.length, 0, context.id);
+		return hash(input, 0, input.length, 0, (byte)context.id);
 	}
 
 	public static byte[] hash(byte[] input, int inOff, int length, int outOff, byte encryptionType) {
@@ -23,7 +23,7 @@ public class SHA1 {
 		digest.doFinal(result, 0);
 
 		// Inject context inter highest 3 bits
-		result[3] = (byte) ((result[3] & 0x1F) | ((encryptionType & 7) << 5));
+		result[3] = (byte) ((result[3] & (byte) 0x1F) | ((encryptionType & 7) << 5));
 
 		System.arraycopy(result, 0, output, outOff, 4);
 
