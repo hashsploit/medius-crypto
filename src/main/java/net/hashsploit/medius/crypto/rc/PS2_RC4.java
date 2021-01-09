@@ -165,9 +165,9 @@ public class PS2_RC4 implements ICipher {
 			state.engineState[state.y] = temp;
 
 			// Xor
-			output[i + outOff] = (byte) (input[i + inOff] ^ state.engineState[(state.engineState[state.x] + state.engineState[state.y])]);
+			output[i + outOff] = (byte) (input[i + inOff] & 0xFF ^ state.engineState[(state.engineState[state.x] & 0xFF + state.engineState[state.y] & 0xFF)] & 0xFF);
 			
-			state.y = (state.engineState[input[i + inOff]] + state.y) & 0xFF;
+			state.y = (state.engineState[input[i + inOff] & 0xFF] & 0xFF + state.y) & 0xFF;
 		}
 	}
 
