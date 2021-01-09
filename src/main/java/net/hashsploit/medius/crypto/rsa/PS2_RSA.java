@@ -60,12 +60,14 @@ public class PS2_RSA implements ICipher {
 		byte[] plain = plainBigInt.toByteArray();
 		plain = Utils.flipByteArray(plain);
 
+		// Sometimes has an extra zero at the end
+		if (plain.length != input.length) {
+			plain = Arrays.copyOf(plain, input.length);
+		}
+		
 		byte[] ourHash = hash(plain);
 
 		if (Utils.sequenceEquals(ourHash, hash)) {
-			if (plain.length != input.length) {
-				plain = Arrays.copyOf(plain, input.length);
-			}
 			return new SCERTDecryptedData(plain, true);
 		}
 
@@ -73,12 +75,13 @@ public class PS2_RSA implements ICipher {
 		plainBigInt = plainBigInt.add(n);
 		plain = plainBigInt.toByteArray();
 		plain = Utils.flipByteArray(plain);
-		ourHash = hash(plain);
-
+		
 		// Sometimes has an extra zero at the end
 		if (plain.length != input.length) {
 			plain = Arrays.copyOf(plain, input.length);
 		}
+		
+		ourHash = hash(plain);
 
 		return new SCERTDecryptedData(plain, Utils.sequenceEquals(ourHash, hash));
 	}
