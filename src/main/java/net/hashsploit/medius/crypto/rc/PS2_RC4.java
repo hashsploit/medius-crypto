@@ -156,8 +156,8 @@ public class PS2_RC4 implements ICipher {
 	private void _encrypt(RC4State state, byte[] input, int inOff, int length, byte[] output, int outOff) {
 
 		for (int i = 0; i < length; ++i) {
-			state.x = (state.x + 5) & 0xff;
-			state.y = (state.y + state.engineState[state.x]) & 0xff;
+			state.x = (state.x + 5) & 0xFF;
+			state.y = (state.y + state.engineState[state.x]) & 0xFF;
 
 			// Swap
 			final byte temp = state.engineState[state.x];
@@ -165,9 +165,9 @@ public class PS2_RC4 implements ICipher {
 			state.engineState[state.y] = temp;
 
 			// Xor
-			output[i + outOff] = (byte) (input[i + inOff] & 0xFF ^ state.engineState[(state.engineState[state.x] & 0xFF + state.engineState[state.y] & 0xFF)] & 0xFF);
+			output[i + outOff] = (byte) ((input[i + inOff] & 0xFF) ^ (state.engineState[((state.engineState[state.x]&0xFF) + (state.engineState[state.y]&0xFF)) & 0xFF]));
 			
-			state.y = (state.engineState[input[i + inOff] & 0xFF] & 0xFF + state.y) & 0xFF;
+			state.y = (state.engineState[input[i + inOff] & 0xFF] + state.y) & 0xFF;
 		}
 	}
 
