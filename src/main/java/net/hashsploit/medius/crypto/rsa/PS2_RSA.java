@@ -3,6 +3,10 @@ package net.hashsploit.medius.crypto.rsa;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import net.hashsploit.medius.crypto.CipherContext;
 import net.hashsploit.medius.crypto.ICipher;
 import net.hashsploit.medius.crypto.SCERTDecryptedData;
@@ -26,13 +30,16 @@ import net.hashsploit.medius.crypto.hash.SHA1;
  */
 public class PS2_RSA implements ICipher {
 
+	private static final BigInteger mediusGlobalKeyN;
+	private static final BigInteger mediusGlobalKeyE;
+	private static final BigInteger mediusGlobalKeyD;
 	private CipherContext context;
-	private BigInteger n;
-	private BigInteger e;
+	private final BigInteger n;
+	private final BigInteger e;
 	private BigInteger d;
 
 	/**
-	 * Create a new RSA key-pair
+	 * Create a new RSA key-pair.
 	 * 
 	 * @param n = p * q
 	 * @param e = public exponent
@@ -42,6 +49,22 @@ public class PS2_RSA implements ICipher {
 		this.n = n;
 		this.e = e;
 		this.d = d;
+	}
+	
+	/**
+	 * Generate a new RSA encryption key.
+	 * @param n
+	 * @param e
+	 */
+	public PS2_RSA(BigInteger n, BigInteger e) {
+		this(n, e, null);
+	}
+	
+	/**
+	 * Generate the RSA key-pair to encrypt and decrypt messages from the SCE-RT GLOBAL key.
+	 */
+	public PS2_RSA() {
+		this(mediusGlobalKeyN, mediusGlobalKeyE, mediusGlobalKeyD);
 	}
 
 	private BigInteger _encrypt(BigInteger m) {
@@ -132,30 +155,12 @@ public class PS2_RSA implements ICipher {
 	}
 
 	/**
-	 * Set n (n = p * q)
-	 * 
-	 * @param n
-	 */
-	protected void setN(BigInteger n) {
-		this.n = n;
-	}
-
-	/**
 	 * Get e (public exponent)
 	 * 
 	 * @return
 	 */
 	public BigInteger getE() {
 		return e;
-	}
-
-	/**
-	 * Set e (public exponent)
-	 * 
-	 * @param e
-	 */
-	protected void setE(BigInteger e) {
-		this.e = e;
 	}
 
 	/**
@@ -166,14 +171,21 @@ public class PS2_RSA implements ICipher {
 	public BigInteger getD() {
 		return d;
 	}
-
+	
 	/**
-	 * Set d (private exponent)
-	 * 
-	 * @param d
+	 * Do this once.
 	 */
-	protected void setD(BigInteger d) {
-		this.d = d;
+	static {
+		// Load key from file
+		JSONTokener tokener = new JSONTokener(PS2_RSA.class.getResourceAsStream("/keys/ps2.json"));
+		JSONArray jsonArray = new JSONArray(tokener);
+		
+		// Get the GLOBAL MEDIUS KEY
+		JSONObject o = (JSONObject) jsonArray.get(0);
+
+		mediusGlobalKeyN = new BigInteger(o.getString("n"), 10);
+		mediusGlobalKeyE = new BigInteger(o.getString("e"), 10);
+		mediusGlobalKeyD = new BigInteger(o.getString("d"), 10);
 	}
 
 }
