@@ -1,11 +1,8 @@
 # Medius Crypto 
 
-Library to encrypt and decrypt PS2 and PS3 Medius messages.
+A crypto library to encrypt/decrypt PS2 and PS3 SCE-RT/Medius messages.
 
-Ported over from the [original project](https://github.com/Dnawrkshp/medius-crypto) in C#.
+See a working implementation [here](https://github.com/hashsploit/clank).
 
-Huge thanks to [Dnawrkshp](https://github.com/Dnawrkshp) for reversing Medius for PS2/PS3.
-
-## To do
-- RS3_RC.java is broken, need to find alternative to `BitConverter.GetBytes()` and `BitConverter.ToUInt32()`.
-- Missing RSA classes.
+## Note
+- PS3_RC.java is not fully implemented yet.

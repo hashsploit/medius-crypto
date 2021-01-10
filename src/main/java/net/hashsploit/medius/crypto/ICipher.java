@@ -1,4 +1,4 @@
-package net.hashsploit.medius;
+package net.hashsploit.medius.crypto;
 
 public interface ICipher {
 	
@@ -14,14 +14,14 @@ public interface ICipher {
 	 * @param hash
 	 * @return
 	 */
-	MediusDecryptedData decrypt(byte[] input, byte[] hash);
+	SCERTDecryptedData decrypt(byte[] input, byte[] hash);
 	
 	/**
 	 * Encrypts the given input buffer and returns the cipher and hash.
 	 * @param plain
 	 * @return
 	 */
-	MediusEncryptedData encrypt(byte[] plain);
+	SCERTEncryptedData encrypt(byte[] plain);
 	
 	/**
 	 * Computes the hash of the given input buffer.

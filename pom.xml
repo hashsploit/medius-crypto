@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.hashsploit</groupId>
 	<artifactId>medius-crypto</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>Medius Crypto</name>
 	<description>Library to encrypt and decrypt PS2 and PS3 Medius (SCE-RT) messages</description>
 	<build>
